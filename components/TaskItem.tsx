@@ -1,32 +1,61 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-export default function TaskItem({ item, onToggle, onDelete }: any) {
+type Task = {
+  id: string;
+  title: string;
+  completed: boolean;
+  created_at: string;
+};
+
+type TaskItemProps = {
+  item: Task;
+  onToggle: (item: Task) => void;
+  onDelete: (id: string) => void;
+};
+
+export default function TaskItem({ item, onToggle, onDelete }: TaskItemProps) {
   return (
-    <TouchableOpacity
-      onPress={() => onToggle(item)}
-      onLongPress={() => onDelete(item.id)}
-    >
-      <View style={styles.taskRow}>
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.left} onPress={() => onToggle(item)}>
         <MaterialIcons
-          name={item.completed ? "check-box" : "check-box-outline-blank"}
-          size={20}
-          color={item.completed ? "#2E5BBA" : "#5A6472"}
+          name={item.completed ? "check-circle" : "radio-button-unchecked"}
+          size={24}
+          color={item.completed ? "#2E5BBA" : "#ccc"}
         />
-        <Text style={styles.taskText}>{item.title}</Text>
-      </View>
-    </TouchableOpacity>
+        <Text style={[styles.title, item.completed && styles.completed]}>
+          {item.title}
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => onDelete(item.id)}>
+        <MaterialIcons name="delete-outline" size={22} color="#e74c3c" />
+      </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  taskRow: {
+  container: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 10,
-    paddingVertical: 8,
+    justifyContent: "space-between",
+    paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: "#eee",
   },
-  taskText: { fontSize: 15 },
+  left: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+  },
+  title: {
+    fontSize: 16,
+    marginLeft: 10,
+    color: "#1F2A44",
+    flex: 1,
+  },
+  completed: {
+    textDecorationLine: "line-through",
+    color: "#aaa",
+  },
 });

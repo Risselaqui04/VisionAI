@@ -1,15 +1,25 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
-    Modal,
-    Pressable,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
-export default function AddTaskModal({ visible, onClose, onSubmit }: any) {
+interface AddTaskModalProps {
+  visible: boolean;
+  onClose: () => void;
+  onSubmit: (text: string) => void;
+}
+
+export default function AddTaskModal({
+  visible,
+  onClose,
+  onSubmit,
+}: AddTaskModalProps) {
   const [text, setText] = useState("");
 
   function handleSubmit() {
@@ -26,12 +36,14 @@ export default function AddTaskModal({ visible, onClose, onSubmit }: any) {
       onRequestClose={onClose}
     >
       <Pressable style={styles.backdrop} onPress={onClose}>
-        <Pressable style={styles.card} onPress={() => {}}>
+        <Pressable style={styles.card} onPress={(e) => e.stopPropagation()}>
           <TextInput
             style={styles.input}
             placeholder="Enter Task"
             value={text}
             onChangeText={setText}
+            onSubmitEditing={handleSubmit}
+            returnKeyType="done"
             autoFocus
           />
           <View style={styles.buttonRow}>

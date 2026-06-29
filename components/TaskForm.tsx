@@ -1,7 +1,13 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 
-export default function TaskForm({ task, setTask, onAdd }: any) {
+interface TaskFormProps {
+  task: string;
+  setTask: (text: string) => void;
+  onAdd: () => void;
+}
+
+export default function TaskForm({ task, setTask, onAdd }: TaskFormProps) {
   return (
     <View style={styles.inputRow}>
       <TextInput
@@ -9,6 +15,8 @@ export default function TaskForm({ task, setTask, onAdd }: any) {
         placeholder="Enter Task"
         value={task}
         onChangeText={setTask}
+        onSubmitEditing={onAdd}
+        returnKeyType="done"
       />
       <TouchableOpacity style={styles.addButton} onPress={onAdd}>
         <MaterialIcons name="add" size={22} color="#fff" />
