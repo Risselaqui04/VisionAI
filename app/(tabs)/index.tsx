@@ -1,17 +1,10 @@
-import { MaterialIcons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+  StyleSheet
 } from "react-native";
 import Toast from "react-native-toast-message";
-import AddTaskModal from "../../components/AddTaskModal";
-import TaskForm from "../../components/TaskForm";
-import TaskItem from "../../components/TaskItem";
 import { supabase } from "../../lib/supabase";
+import CameraScreen from "../CameraScreen";
 
 export default function App() {
   const [task, setTask] = useState("");
@@ -77,38 +70,7 @@ export default function App() {
     loadTasks();
   }, []);
 
-  return (
-    <View style={styles.container}>
-      <View style={headerStyles.header}>
-        <Text style={headerStyles.title}>TaskFlow</Text>
-        <TouchableOpacity onPress={() => setModalVisible(true)}>
-          <MaterialIcons name="add-circle-outline" size={28} color="#2E5BBA" />
-        </TouchableOpacity>
-      </View>
-
-      <TaskForm task={task} setTask={setTask} onAdd={handleAddTask} />
-
-      <FlatList
-        data={tasks}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <TaskItem
-            item={item}
-            onToggle={toggleTask}
-            onDelete={handleDeleteTask}
-          />
-        )}
-      />
-
-      <AddTaskModal
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        onSubmit={handleSubmitTask}
-      />
-
-      <Toast />
-    </View>
-  );
+  return <CameraScreen />;
 }
 
 const headerStyles = StyleSheet.create({

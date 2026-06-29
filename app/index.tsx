@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Toast from "react-native-toast-message";
 import AddTaskModal from "../components/AddTaskModal";
 import TaskForm from "../components/TaskForm";
 import TaskItem from "../components/TaskItem";
 import { supabase } from "../lib/supabase";
-import { Task } from "../types/task"; // ✅ import na lang dito
+import { Link } from 'expo-router';
 
-// ❌ Tanggalin na ang local Task type
+type Task = {
+  id: string;
+  title: string;
+  completed: boolean;
+  created_at: string;
+};
 
 export default function App() {
   const [task, setTask] = useState("");
@@ -94,6 +99,11 @@ export default function App() {
           />
         )}
       />
+      <Link href="/CameraScreen" asChild>
+        <TouchableOpacity style={styles.cameraButton}>
+          <Text style={styles.cameraButtonText}>Open Camera</Text>
+        </TouchableOpacity>
+      </Link>
       <AddTaskModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
@@ -116,4 +126,15 @@ const headerStyles = StyleSheet.create({
 
 const styles = StyleSheet.create({
   container: { flex: 1, paddingHorizontal: 20, backgroundColor: "#fff" },
+  cameraButton: {
+    backgroundColor: "#2E5BBA",
+    padding: 14,
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+  cameraButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
 });
