@@ -1,10 +1,10 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
-import { analyzeImage, ANALYSIS_PROMPT } from '../lib/gemini';
+import { analyzeImage, PROMPTS } from '../lib/gemini';
 
 export default function ResultScreen() {
-  const { base64Image } = useLocalSearchParams();
+  const { base64Image, promptKey } = useLocalSearchParams();
   const router = useRouter();
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -13,7 +13,8 @@ export default function ResultScreen() {
   useEffect(() => {
     async function analyze() {
       try {
-        const response = await analyzeImage(base64Image, ANALYSIS_PROMPT);
+        const prompt = PROMPTS[promptKey] || PROMPTS.academic;
+        const response = await analyzeImage(base64Image, prompt);
         console.log('Gemini response:', JSON.stringify(response));
         const text = response.candidates[0].content.parts[0].text;
         const clean = text.replace(/```json|```/g, '').trim();
@@ -51,7 +52,11 @@ export default function ResultScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.heading}>Analysis Result</Text>
+      <Text style={styles.heading}>
+        {promptKey === 'academic' ? '🎓 Academic Analysis' :
+         promptKey === 'safety' ? '⚠️ Safety Analysis' :
+         '📋 Inventory Analysis'}
+      </Text>
 
       <View style={styles.section}>
         <Text style={styles.label}>Objects</Text>
